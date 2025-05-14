@@ -9,26 +9,6 @@ const props = defineProps({
 });
 
 
-// 分析语言占比
-function analyzeLanguage(text) {
-  let chineseCount = 0;
-  let englishCount = 0;
-
-  for (let char of text) {
-    let code = char.charCodeAt(0);
-    if (code >= 0x4E00 && code <= 0x9FFF) chineseCount++; // 统计中文字符
-    if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) englishCount++; // 统计英文字符
-  }
-
-  let total = chineseCount + englishCount;
-  if (total === 0) return "无法识别"; // 防止文本为空的情况
-
-  let chineseRatio = chineseCount / total;
-
-  return chineseRatio > 0.5 ? "中文占多数" : "英文占多数";
-}
-
-
 // 插件启动时立即隐藏窗口
 utools.hideMainWindow();
 
@@ -44,8 +24,6 @@ if (payload === '翻译' || payload === '百度翻译') {
   payload = encodeURIComponent(payload)
 }
 
-// 粗糙赋值
-// let lang = analyzeLanguage(props.enterAction.payload) === '中文占多数' ? 'zh2en' : 'en2zh';
 
 
 // 百度翻译链接，加个时间戳以便复用浏览器的时候强制页面刷新
@@ -57,6 +35,13 @@ const css = `
 /* 屏蔽点击或拖拽上传 */
 .ant-upload.ant-upload-drag .ant-upload-drag-container {
   display: none !important;
+}
+
+/* 屏蔽花里胡哨的彩色图片秒翻字体 */
+.in7aMwxd {
+    background: none !important; /* 取消背景渐变 */
+    -webkit-text-fill-color: inherit !important; /* 恢复正常文字颜色 */
+    -webkit-background-clip: border-box !important; /* 取消文本裁剪 */
 }
 
 /* 屏蔽学术论文按钮 */
@@ -89,6 +74,21 @@ button.tCjFePWN {
   display: none !important;
 }
 
+/* 屏蔽点赞按钮 */
+.fGdWpPpO.bLSwAXlU {
+  display: none !important;
+}
+
+/* 屏蔽问问A助手 */
+.XS9zPMly {
+  display: none !important;
+}
+
+/* 屏蔽三横按钮 */
+.lfsnR62F  {
+  display: none !important;
+}
+
 /* 屏蔽买1送6图片广告 */
 ._m6jE1Mj,._m6jE1Mj+.PwoDe1T6 {
   display: none !important;
@@ -110,8 +110,10 @@ button.tCjFePWN {
 }
 `
 
-// 点击元素收起导航栏
-function clickElement() {
+
+// 执行 JavaScript 注入的回调函数
+function evaluateCallback() {
+  // 点击元素收起导航栏
   const button = document.querySelector("#multiContainer > div.ZHrlRAUU > div > div.lslKUKjX > div.qJU3axmS > div.LxF9kyWA > span") as HTMLElement;
   if (button) {
     button.click(); // 自动点击按钮
@@ -124,12 +126,14 @@ function clickElement() {
 
 // 获取闲置的 ubrowser
 const idleUBrowsers = utools.getIdleUBrowsers();
-// console.log(idleUBrowsers);
-if (idleUBrowsers.length > 0) {
-  utools.ubrowser.goto(url).css(css).evaluate(clickElement).run(idleUBrowsers[0].id)
-} else {
-  utools.ubrowser.viewport(1024, 600).goto(url).css(css).evaluate(clickElement).run({});
-}
+// const ubrowser = utools.ubrowser.viewport(1024, 600).hide().goto(url).css(css).evaluate(evaluateCallback).show();
+const ubrowser = utools.ubrowser.viewport(1024, 600).goto(url).css(css).evaluate(evaluateCallback);
+
+// 如果有闲置的 ubrowser，则使用它，否则创建新窗口
+ubrowser.run(idleUBrowsers.length > 0 ? idleUBrowsers[0].id : null);
+
+
+
 
 // utools.ubrowser.devTools()
 
@@ -138,19 +142,6 @@ if (idleUBrowsers.length > 0) {
 utools.outPlugin();
 
 
-
-
-
-
-
-
-
-
-// utools.ubrowser.goto('https://fanyi.baidu.com/mtpe-individual/multimodal?query=good').run()
-// utools.ubrowser.goto(`https://fanyi.baidu.com/mtpe-individual/multimodal?query=${props.enterAction.payload}`).viewport(1024,600).run()
-// utools.hideMainWindow();
-// ubrowser.show()
-// console.log(props.enterAction.payload);
 
 </script>
 
