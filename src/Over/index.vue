@@ -30,6 +30,11 @@ if (payload === '翻译' || payload === '百度翻译') {
 // const url = `https://fanyi.baidu.com/mtpe-individual/multimodal?query=${payload}&lang=${lang}&t=${Date.now()}`
 const url = `https://fanyi.baidu.com/mtpe-individual/multimodal?query=${payload}&lang=ait2zh&t=${Date.now()}`
 
+
+// /* 屏蔽通用领域学术论文一整行 */
+// .qJU3axmS,.dfAvRK2O {
+//   display: none !important;
+// }
 // 注入css去广告
 const css = `
 /* 屏蔽点击或拖拽上传 */
@@ -90,8 +95,16 @@ button.tCjFePWN {
 }
 
 /* 屏蔽买1送6图片广告 */
-._m6jE1Mj,._m6jE1Mj+.PwoDe1T6 {
+._m6jE1Mj {
   display: none !important;
+}
+/* 屏蔽多余的分割线 */
+.PwoDe1T6 {
+  padding: 10px 0 !important;
+}
+/* 屏蔽多余的分割线 */
+.PwoDe1T6:before {
+    border-top: none !important;
 }
 
 /* 屏蔽编辑译文，添加术语，智能增强按钮 */
@@ -127,7 +140,7 @@ function evaluateCallback() {
 // 获取闲置的 ubrowser
 const idleUBrowsers = utools.getIdleUBrowsers();
 // const ubrowser = utools.ubrowser.viewport(1024, 600).hide().goto(url).css(css).evaluate(evaluateCallback).show();
-const ubrowser = utools.ubrowser.viewport(1024, 600).goto(url).css(css).evaluate(evaluateCallback);
+const ubrowser = utools.ubrowser.viewport(1024, 600).goto(url).css(css).evaluate(evaluateCallback)
 
 // 如果有闲置的 ubrowser，则使用它，否则创建新窗口
 ubrowser.run(idleUBrowsers.length > 0 ? idleUBrowsers[0].id : null);
