@@ -37,6 +37,53 @@ const url = `https://fanyi.baidu.com/mtpe-individual/multimodal?query=${payload}
 // }
 // 注入css去广告
 const css = `
+@media (prefers-color-scheme: dark) {
+}
+
+/* 清除全部最小宽度限制 */
+* {
+  min-width: 0 !important;
+}
+
+/* 屏蔽上方导航栏 */
+.b4wym9D2 {
+  display: none !important;
+}
+
+/* 屏蔽下方AI论文精翻等多余功能 */
+.Hu5qsRSB {
+  display: none !important;
+}
+
+/* 屏蔽右侧多余的功能 */
+.qphmPPyw {
+  display: none !important;
+}
+
+/* 屏蔽多余的左边距 */
+.L0kERzJV {
+  padding: 0 0 0 0 !important;
+}
+
+/* 屏蔽多余的下边距 */
+.Hu5qsRSB+div {
+  display: none !important;
+}
+
+/* 屏蔽多余的翻译分类 */
+.ant-tabs-tab[data-node-key="3"],
+.ant-tabs-tab[data-node-key="4"],
+.ant-tabs-tab[data-node-key="5"],
+.ant-tabs-tab[data-node-key="6"]
+{
+  display: none !important;
+}
+
+
+
+
+/* -----------下发为旧版屏蔽----------- */
+
 /* 屏蔽点击或拖拽上传 */
 .ant-upload.ant-upload-drag .ant-upload-drag-container {
   display: none !important;
@@ -54,10 +101,11 @@ const css = `
   display: none !important;
 }
 
-/* 屏蔽实时翻译按钮 */
+/* 屏蔽实时翻译按钮 
 button.tCjFePWN {
   display: none !important;
 }
+*/
 
 /* 屏蔽AI大模型翻译按钮 */
 .sRKHr8FI {
@@ -134,13 +182,15 @@ function evaluateCallback() {
   } else {
     console.log("未找到目标按钮");
   }
+
+  // document.querySelector("div.yoRr80Di > button > span").innerHTML="解锁字数上限"
 }
 
 
 // 获取闲置的 ubrowser
 const idleUBrowsers = utools.getIdleUBrowsers();
 // const ubrowser = utools.ubrowser.viewport(1024, 600).hide().goto(url).css(css).evaluate(evaluateCallback).show();
-const ubrowser = utools.ubrowser.viewport(1024, 600).goto(url).css(css).evaluate(evaluateCallback)
+const ubrowser = utools.ubrowser.viewport(800, 400).goto(url).css(css).evaluate(evaluateCallback)
 
 // 如果有闲置的 ubrowser，则使用它，否则创建新窗口
 ubrowser.run(idleUBrowsers.length > 0 ? idleUBrowsers[0].id : null);
