@@ -37,26 +37,18 @@ const url = `https://fanyi.baidu.com/mtpe-individual/multimodal?query=${payload}
 // }
 // 注入css去广告
 const css = `
-@media (prefers-color-scheme: dark) {
-}
-
-/* 清除全部最小宽度限制 */
-* {
+/* 清除全部最小宽度限制，但排除右侧机器人小图标 */
+*:not(.qphmPPyw *) {
   min-width: 0 !important;
 }
 
-/* 屏蔽上方导航栏 */
-.b4wym9D2 {
-  display: none !important;
-}
-
-/* 屏蔽下方AI论文精翻等多余功能 */
+/* 屏蔽底部广告 */
 .Hu5qsRSB {
   display: none !important;
 }
 
-/* 屏蔽右侧多余的功能 */
-.qphmPPyw {
+/* 屏蔽输入框内多余文档翻译入口 */
+.rfhEM3lg.bxgG6w8l {
   display: none !important;
 }
 
@@ -69,107 +61,59 @@ const css = `
 .Hu5qsRSB+div {
   display: none !important;
 }
+.qphmPPyw {
+  height: 100% !important;
+}
 
-/* 屏蔽多余的翻译分类 */
-.ant-tabs-tab[data-node-key="3"],
-.ant-tabs-tab[data-node-key="4"],
-.ant-tabs-tab[data-node-key="5"],
-.ant-tabs-tab[data-node-key="6"]
-{
+/* 屏蔽多余的右边距 */
+.qphmPPyw {
+  right: 0 !important;
+  margin-left: 1px !important;
+}
+
+/* 屏蔽导航栏广告 */
+.MMqloUXF>div:nth-child(1),
+.MMqloUXF>div:nth-child(5),
+.ZqJhu4sT,
+.UzOvH9bK,
+.operation-pos-new {
   display: none !important;
 }
 
+/* 导航栏布局优化 */
+.lTKZuXrx:after {
+  margin-right: 0 !important;
+}
 
-
-
-/* -----------下发为旧版屏蔽----------- */
-
-/* 屏蔽点击或拖拽上传 */
-.ant-upload.ant-upload-drag .ant-upload-drag-container {
+/* 屏蔽导航栏 */
+.GXuSnnox {
   display: none !important;
 }
 
-/* 屏蔽花里胡哨的彩色图片秒翻字体 */
-.in7aMwxd {
-    background: none !important; /* 取消背景渐变 */
-    -webkit-text-fill-color: inherit !important; /* 恢复正常文字颜色 */
-    -webkit-background-clip: border-box !important; /* 取消文本裁剪 */
-}
-
-/* 屏蔽学术论文按钮 */
-.NttHa0mN>span:nth-child(2) {
+/* 只留下文本翻译，不了都删掉 */
+.yA48tp_a.huWexV6u {
   display: none !important;
 }
-
-/* 屏蔽实时翻译按钮 
-button.tCjFePWN {
-  display: none !important;
+.Ku91ofAV,
+.b15UFYYv {
+  top: 0 !important;
 }
-*/
-
-/* 屏蔽AI大模型翻译按钮 */
-.sRKHr8FI {
-  display: none !important;
+#editor-text {
+  height: 100% !important;
 }
 
-/* 屏蔽人工翻译按钮 */
-.YGx8668_+.YGx8668_ {
-  display: none !important;
+/* 改一下间距 */
+.ZhDN2yBJ {
+  padding: 0 1px 0 0px !important;
 }
 
-/* 屏蔽AI论文精翻按钮 */
-.h5JHRvHF {
-  display: none !important;
-}
-
-/* 屏蔽专业译后编辑按钮 */
-.jygLSCYa {
-  display: none !important;
-}
-
-/* 屏蔽点赞按钮 */
-.fGdWpPpO.bLSwAXlU {
-  display: none !important;
-}
-
-/* 屏蔽问问A助手 */
-.XS9zPMly {
-  display: none !important;
-}
-
-/* 屏蔽三横按钮 */
-.lfsnR62F  {
-  display: none !important;
-}
-
-/* 屏蔽买1送6图片广告 */
-._m6jE1Mj {
-  display: none !important;
-}
-/* 屏蔽多余的分割线 */
-.PwoDe1T6 {
-  padding: 10px 0 !important;
-}
-/* 屏蔽多余的分割线 */
-.PwoDe1T6:before {
-    border-top: none !important;
-}
-
-/* 屏蔽编辑译文，添加术语，智能增强按钮 */
-.cfm52tbf,.uPRUHmis,.QrzU1B4W {
-  display: none !important;
-}
-
-/* 屏蔽进入词典模式 */
-.o7b5Ojxh {
-  display: none !important;
-}
-
-/* 屏蔽页尾 */
-.sF3Yx_p0 {
+/* 去掉右下角客服和收藏夹 */
+.S1oAKzr9,
+.AvGcOE_K.ARnMfncW {
   display: none !important;
 }
 `
+
 
 
 // 执行 JavaScript 注入的回调函数
@@ -190,7 +134,7 @@ function evaluateCallback() {
 // 获取闲置的 ubrowser
 const idleUBrowsers = utools.getIdleUBrowsers();
 // const ubrowser = utools.ubrowser.viewport(1024, 600).hide().goto(url).css(css).evaluate(evaluateCallback).show();
-const ubrowser = utools.ubrowser.viewport(800, 400).goto(url).css(css).evaluate(evaluateCallback)
+const ubrowser = utools.ubrowser.viewport(900, 500).goto(url).css(css).evaluate(evaluateCallback)
 
 // 如果有闲置的 ubrowser，则使用它，否则创建新窗口
 ubrowser.run(idleUBrowsers.length > 0 ? idleUBrowsers[0].id : null);
